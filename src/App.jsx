@@ -102,10 +102,11 @@ function App() {
       isSelf: true,
     },
   ]);
-  const [filter, setFilter] = useState("All");
+  const [filter, setFilter] = useState("");
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [newMessage, setNewMessage] = useState("");
 
+  // Unique users array including "All"
   const uniqueUsers = ["All", ...new Set(messages.map((msg) => msg.name))];
 
   const filteredMessages =
@@ -159,6 +160,7 @@ function App() {
               placeholder="Search by name"
               onChange={(e) => setFilter(e.target.value)}
             />
+            {/* Show all users in the dropdown */}
             {uniqueUsers
               .filter((user) =>
                 user.toLowerCase().includes(filter.toLowerCase())
@@ -167,7 +169,10 @@ function App() {
                 <div
                   key={index}
                   className="filter-option"
-                  onClick={() => setFilter(user)}
+                  onClick={() => {
+                    setFilter(user);
+                    setShowFilterDropdown(false); // Close dropdown after selection
+                  }}
                 >
                   {user}
                 </div>
