@@ -30,37 +30,42 @@ function App() {
     {
       name: "Amit Sharma",
       time: "10:05 AM",
-      message: "The assignment deadline is tomorrow.",
+      message:
+        "Please be reminded that the deadline for the DBMS assignment is tomorrow. Kindly ensure all submissions are completed on time.",
       isSelf: false,
     },
     {
       name: "Sneha Gupta",
       time: "10:10 AM",
-      message: "Exam dates are announced. Starts from 20th Nov.",
+      message:
+        "The dates for the AIML exams have been finalized. The exams will commence on November 20th. Make sure to review the course material thoroughly before the exam.",
       isSelf: false,
     },
     {
       name: "Rohan Mehra",
       time: "10:15 AM",
-      message: "Please share notes for Unit 3!",
+      message:
+        "Assignment Deadline for Communication Networks is this Saturday. Make sure you upload all files on Google Classroom",
       isSelf: false,
     },
     {
       name: "Jyoti",
       time: "10:18 AM",
-      message: "I can share mine. Sending in a moment.",
+      message:
+        "Ma'am can you please confirm when will we have our group project meeting?",
       isSelf: true,
     },
     {
       name: "Priya Singh",
       time: "10:20 AM",
-      message: "Group project meeting at 5 PM today. Don't forget!",
+      message:
+        "Reminder: Our group project meeting is scheduled for 5 PM today.",
       isSelf: false,
     },
     {
       name: "Varun Patel",
       time: "10:25 AM",
-      message: "Thanks, Jyoti!",
+      message: "Today's 11:45 class will be conducted in JN110",
       isSelf: false,
     },
   ]);
@@ -71,7 +76,11 @@ function App() {
   const uniqueUsers = ["All", ...new Set(messages.map((msg) => msg.name))];
 
   const filteredMessages =
-    filter === "All" ? messages : messages.filter((msg) => msg.name === filter);
+    filter === "All"
+      ? messages
+      : messages.filter((msg) =>
+          msg.name.toLowerCase().includes(filter.toLowerCase())
+        );
 
   const handleSendMessage = () => {
     if (newMessage.trim() === "") return;
@@ -81,7 +90,12 @@ function App() {
     });
     setMessages([
       ...messages,
-      { name: "Jyoti", time: currentTime, message: newMessage, isSelf: true },
+      {
+        name: "Jyoti",
+        time: currentTime,
+        message: newMessage,
+        isSelf: true,
+      },
     ]);
     setNewMessage("");
   };
