@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./App.css";
-import fil from "../public/fil.png"; // Importing the filter image
 
 const ChatMessage = ({ name, time, message, isSelf }) => {
   const getInitials = (name) =>
@@ -68,16 +67,11 @@ function App() {
   const [filter, setFilter] = useState("All");
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [newMessage, setNewMessage] = useState("");
-  const [searchQuery, setSearchQuery] = useState(""); // To store the input for filtering
 
   const uniqueUsers = ["All", ...new Set(messages.map((msg) => msg.name))];
 
   const filteredMessages =
-    filter === "All" || !searchQuery
-      ? messages
-      : messages.filter((msg) =>
-          msg.name.toLowerCase().includes(searchQuery.toLowerCase())
-        );
+    filter === "All" ? messages : messages.filter((msg) => msg.name === filter);
 
   const handleSendMessage = () => {
     if (newMessage.trim() === "") return;
@@ -97,29 +91,35 @@ function App() {
       <div className="chat-container">
         <div className="chat-header">
           <div className="group-name">College Updates</div>
-
-          {/* Filter Icon Below the Chat Name */}
-          <div className="filter-icon">
-            <img
-              src={fil}
-              alt="Filter"
-              onClick={() => setShowFilterDropdown(!showFilterDropdown)}
-              title="Filter Messages"
-              style={{ cursor: "pointer", width: "20px", height: "20px" }} // Small icon size
-            />
-            {showFilterDropdown && (
-              <div className="filter-input">
-                <input
-                  type="text"
-                  placeholder="Filter by name..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)} // Update filter input
-                />
-              </div>
-            )}
-          </div>
+          <button
+            className="filter-button"
+            onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+          >
+            Filter
+          </button>
         </div>
-
+        {showFilterDropdown && (
+          <div className="filter-dropdown">
+            <input
+              type="text"
+              placeholder="Search by name"
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            {uniqueUsers
+              .filter((user) =>
+                user.toLowerCase().includes(filter.toLowerCase())
+              )
+              .map((user, index) => (
+                <div
+                  key={index}
+                  className="filter-option"
+                  onClick={() => setFilter(user)}
+                >
+                  {user}
+                </div>
+              ))}
+          </div>
+        )}
         <div className="chat-messages">
           {filteredMessages.map((msg, index) => (
             <ChatMessage
@@ -137,7 +137,6 @@ function App() {
             placeholder="Type a message..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
           />
           <button onClick={handleSendMessage}>Send</button>
         </div>
