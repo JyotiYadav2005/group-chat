@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 
 const ChatMessage = ({ name, time, message, isSelf }) => {
@@ -56,17 +56,50 @@ function App() {
       isSelf: true,
     },
     {
+      name: "Amit Sharma",
+      time: "10:30 AM",
+      message:
+        "Just a friendly reminder to submit your project updates by tomorrow.",
+      isSelf: false,
+    },
+    {
+      name: "Sneha Gupta",
+      time: "10:35 AM",
+      message:
+        "Don't forget to review the new materials uploaded for the AIML exam preparation.",
+      isSelf: false,
+    },
+    {
+      name: "Jyoti",
+      time: "10:40 AM",
+      message: "Sure, I'll review it. Can you share the link to the material?",
+      isSelf: true,
+    },
+    {
       name: "Priya Singh",
-      time: "10:20 AM",
+      time: "10:45 AM",
       message:
         "Reminder: Our group project meeting is scheduled for 5 PM today.",
       isSelf: false,
     },
     {
+      name: "Rohan Mehra",
+      time: "10:50 AM",
+      message: "Don't forget to submit your assignment by Saturday.",
+      isSelf: false,
+    },
+    {
       name: "Varun Patel",
-      time: "10:25 AM",
+      time: "10:55 AM",
       message: "Today's 11:45 class will be conducted in JN110",
       isSelf: false,
+    },
+    {
+      name: "Jyoti",
+      time: "10:58 AM",
+      message:
+        "Thanks, I’ll be there. Also, any updates on the lab assignment?",
+      isSelf: true,
     },
   ]);
   const [filter, setFilter] = useState("All");
@@ -81,6 +114,12 @@ function App() {
       : messages.filter((msg) =>
           msg.name.toLowerCase().includes(filter.toLowerCase())
         );
+
+  const chatEndRef = useRef(null);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleSendMessage = () => {
     if (newMessage.trim() === "") return;
@@ -107,11 +146,12 @@ function App() {
           <div className="group-name">College Updates</div>
           <button
             className="filter-button"
-            onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+            onClick={() => setShowFilterDropdown((prev) => !prev)} // Toggle dropdown visibility
           >
             Filter
           </button>
         </div>
+
         {showFilterDropdown && (
           <div className="filter-dropdown">
             <input
@@ -134,7 +174,8 @@ function App() {
               ))}
           </div>
         )}
-        <div className="chat-messages">
+
+        <div className="chat-messages" style={{ flex: 1, overflowY: "auto" }}>
           {filteredMessages.map((msg, index) => (
             <ChatMessage
               key={index}
@@ -144,15 +185,32 @@ function App() {
               isSelf={msg.isSelf}
             />
           ))}
+          <div ref={chatEndRef}></div>
         </div>
-        <div className="chat-input">
+
+        <div
+          className="chat-input"
+          style={{ padding: "10px", borderTop: "1px solid #ccc" }}
+        >
           <input
             type="text"
             placeholder="Type a message..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
+            style={{ flex: 1, padding: "8px", marginRight: "10px" }}
           />
-          <button onClick={handleSendMessage}>Send</button>
+          <button
+            onClick={handleSendMessage}
+            style={{
+              padding: "8px 12px",
+              backgroundColor: "#007bff",
+              color: "#fff",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Send
+          </button>
         </div>
       </div>
     </div>
